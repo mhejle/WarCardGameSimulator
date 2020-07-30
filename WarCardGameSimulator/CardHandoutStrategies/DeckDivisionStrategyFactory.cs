@@ -2,7 +2,7 @@ using System;
 
 namespace WarCardGameSimulator.CardHandoutStrategies
 {
-    public class DeckDevisionStrategyFactory
+    public class DeckDivisionStrategyFactory
     {
         public IHandOutStrategy Create(DeckDivisionStrategyType type)
         {

@@ -16,11 +16,15 @@ namespace WarCardGameSimulator
             return new Card(Rank.None, Suit.None);
         }
 
-        public bool IsHigher(Card other)
+        public bool IsHigherThan(Card other)
         {
             //TODO handle Rank.None
-            return this.Rank > other.Rank;
+            return Rank > other.Rank;
         }
-        
+
+        public bool IsSameRank(Card other)
+        {
+            return Rank == other.Rank;
+        }
     }
 }

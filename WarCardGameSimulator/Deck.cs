@@ -6,7 +6,7 @@ namespace WarCardGameSimulator
 {
     public class Deck : CardStack
     {
-        private Deck(int numberOfJokersToInclude) : base(CreateCards(numberOfJokersToInclude))
+        public Deck(int numberOfJokersToInclude) : base(CreateCards(numberOfJokersToInclude))
         {
         }
 
@@ -29,34 +29,6 @@ namespace WarCardGameSimulator
             }
 
             return cards;
-        }
-
-        public Deck CreateDeckWithJokers(int numberOfJokersToInclude)
-        {
-            return new Deck(numberOfJokersToInclude);
-        }
-
-        public Deck CreateDeckNoJokers()
-        {
-            return new Deck(0);
-        }
-
-        public IEnumerable<Card> DrawCards(in int count)
-        {
-            if (count > Cards.Count)
-            {
-                throw new ArgumentException($"Unable to draw {count} cards - only {Cards.Count} cards left");
-            }
-            
-            List<Card> drawnCards = new List<Card>();
-            for (var i = 0; i < count; i++)
-            {
-                if (!TryDrawCard(out Card c))
-                    throw new ArgumentException($"Unable to draw card");
-                drawnCards.Add(c);
-            }
-
-            return drawnCards;
         }
     }
     
