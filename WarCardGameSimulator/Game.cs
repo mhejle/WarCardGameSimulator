@@ -30,6 +30,15 @@ namespace WarCardGameSimulator
             while (BothPlayersHaveCards())
             {
                 _result.NumberOfDraws++;
+
+                if (_result.NumberOfDraws > 20000)
+                {
+                    _result.Winner = "No winner found in 20000 draws";
+                    _result.WinnerFound = false;
+                    Console.WriteLine("No winner found in 20000 draws");
+                    
+                    return _result;
+                }
                 
                 Console.WriteLine($"War: draw number: {_result.NumberOfDraws}. Cards, playerOne:{_playerStacks.PlayerOneStack.Count} playerTwo: {_playerStacks.PlayerTwoStack.Count}");
                 var playerOneCard = _playerStacks.PlayerOneStack.DrawCard();
@@ -39,6 +48,7 @@ namespace WarCardGameSimulator
             }
 
             _result.Winner = _playerStacks.PlayerOneStack.IsEmpty ? "Player two" : "Player one";
+            _result.WinnerFound = true;
             Console.WriteLine($"War: a winner was found: {_result.Winner}");
             return _result;
         }
@@ -80,30 +90,41 @@ namespace WarCardGameSimulator
             }
             else
             {
-                var playerOneWarCards = _playerStacks.PlayerOneStack.DrawCards(4).ToList();
-                var playerTwoWarCards = _playerStacks.PlayerTwoStack.DrawCards(4).ToList();
+                var playerOneWarBountyCards = _playerStacks.PlayerOneStack.DrawCards(3).ToList();
+                var playerTwoWarBountyCards = _playerStacks.PlayerTwoStack.DrawCards(3).ToList();
+                var playerOneWarCard = _playerStacks.PlayerOneStack.DrawCard();
+                var playerTwoWarCard = _playerStacks.PlayerTwoStack.DrawCard();
                 
-                if (playerOneWarCards.Last().IsSameRank(playerTwoWarCards.Last()))
+                if (playerOneWarCard.IsSameRank(playerTwoWarCard))
                 {
                     cardsCarriedOverFromPreviousWars.Add(playerOneCard);
                     cardsCarriedOverFromPreviousWars.Add(playerTwoCard);
-                    cardsCarriedOverFromPreviousWars.AddRange(playerOneWarCards.GetRange(0,3));
-                    cardsCarriedOverFromPreviousWars.AddRange(playerTwoWarCards.GetRange(0,3));
+                    
+                    cardsCarriedOverFromPreviousWars.AddRange(playerOneWarBountyCards);
+                    cardsCarriedOverFromPreviousWars.AddRange(playerTwoWarBountyCards);
+                    
+                    cardsCarriedOverFromPreviousWars.Add(playerOneWarCard);
+                    cardsCarriedOverFromPreviousWars.Add(playerTwoWarCard);
+                    
                     War(playerOneCard, playerTwoCard, cardsCarriedOverFromPreviousWars);
                 }
-                else if (playerOneWarCards.Last().IsHigherThan(playerTwoWarCards.Last()))
+                else if (playerOneWarBountyCards.Last().IsHigherThan(playerTwoWarBountyCards.Last()))
                 {
-                    Console.WriteLine($"War: PlayerOne won the war with {playerOneWarCards.Last()} vs {playerTwoWarCards.Last()}");
+                    Console.WriteLine($"War: PlayerOne won the war with {playerOneWarBountyCards.Last()} vs {playerTwoWarBountyCards.Last()}");
                     _playerStacks.PlayerOneStack.Add(playerOneCard, playerTwoCard);
-                    _playerStacks.PlayerOneStack.Add(playerOneWarCards.ToArray());
-                    _playerStacks.PlayerOneStack.Add(playerTwoWarCards.ToArray());
+                    _playerStacks.PlayerOneStack.Add(playerOneWarBountyCards.ToArray());
+                    _playerStacks.PlayerOneStack.Add(playerTwoWarBountyCards.ToArray());
+                    
+                    _playerStacks.PlayerOneStack.Add(playerOneWarCard, playerTwoWarCard);
                 }
                 else
                 {
-                    Console.WriteLine($"War: PlayerTwo won the war with {playerTwoWarCards.Last()} vs {playerOneWarCards.Last()}");
+                    Console.WriteLine($"War: PlayerTwo won the war with {playerTwoWarBountyCards.Last()} vs {playerOneWarBountyCards.Last()}");
                     _playerStacks.PlayerTwoStack.Add(playerOneCard, playerTwoCard);
-                    _playerStacks.PlayerTwoStack.Add(playerOneWarCards.ToArray());
-                    _playerStacks.PlayerTwoStack.Add(playerTwoWarCards.ToArray());
+                    _playerStacks.PlayerTwoStack.Add(playerOneWarBountyCards.ToArray());
+                    _playerStacks.PlayerTwoStack.Add(playerTwoWarBountyCards.ToArray());
+                    
+                    _playerStacks.PlayerTwoStack.Add(playerOneWarCard, playerTwoWarCard);
                 }
                 
             }

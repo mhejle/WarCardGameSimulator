@@ -11,5 +11,7 @@ namespace WarCardGameSimulator
         public int NumberOfWars { get; set; }
         public int NumberOfDraws { get; set; }
         public string Winner { get; set; }
+        
+        public bool WinnerFound { get; set; }
     }
 }
