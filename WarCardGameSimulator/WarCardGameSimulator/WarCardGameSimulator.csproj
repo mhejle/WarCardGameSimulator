@@ -21,4 +21,16 @@
       <PackageReference Include="System.CommandLine.DragonFruit" Version="0.3.0-alpha.20371.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="WarCardGameSimulatorTest\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="WarCardGameSimulatorTest\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="WarCardGameSimulatorTest\**" />
+    </ItemGroup>
+
 </Project>

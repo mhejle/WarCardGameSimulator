@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarCardGameSimulator", "WarCardGameSimulator.csproj", "{6124A3CD-0725-48CF-B6DD-4D59C1E2D8B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarCardGameSimulator", "WarCardGameSimulator\WarCardGameSimulator.csproj", "{6124A3CD-0725-48CF-B6DD-4D59C1E2D8B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarCardGameSimulatorTest", "WarCardGameSimulatorTest\WarCardGameSimulatorTest.csproj", "{09AE8FA6-4185-48E6-9F99-8176F4E22713}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{6124A3CD-0725-48CF-B6DD-4D59C1E2D8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6124A3CD-0725-48CF-B6DD-4D59C1E2D8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6124A3CD-0725-48CF-B6DD-4D59C1E2D8B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09AE8FA6-4185-48E6-9F99-8176F4E22713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09AE8FA6-4185-48E6-9F99-8176F4E22713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09AE8FA6-4185-48E6-9F99-8176F4E22713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09AE8FA6-4185-48E6-9F99-8176F4E22713}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
