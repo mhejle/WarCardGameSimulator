@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WarCardGameSimulator.CardHandoutStrategies;
 
@@ -46,7 +47,7 @@ namespace WarCardGameSimulator
         {
             if (playerOneCard.IsSameRank(playerTwoCard))
             {
-                War(playerOneCard, playerTwoCard);
+                War(playerOneCard, playerTwoCard, new List<Card>());
             }
             else if (playerOneCard.IsHigherThan(playerTwoCard))
             {
@@ -58,7 +59,7 @@ namespace WarCardGameSimulator
             }
         }
 
-        private void War(Card playerOneCard, Card playerTwoCard)
+        private void War(Card playerOneCard, Card playerTwoCard, List<Card> cardsCarriedOverFromPreviousWars)
         {
             Console.WriteLine($"War: {playerOneCard} vs {playerTwoCard}");
             _result.NumberOfWars++;
@@ -84,10 +85,11 @@ namespace WarCardGameSimulator
                 
                 if (playerOneWarCards.Last().IsSameRank(playerTwoWarCards.Last()))
                 {
-                    Console.WriteLine($"War: should continue - not implemented");
-                    //TODO add option for wars to continue
-                    //War(playerOneCard, playerTwoCard);
-                    throw new ArgumentException("continuing wars not supported");
+                    cardsCarriedOverFromPreviousWars.Add(playerOneCard);
+                    cardsCarriedOverFromPreviousWars.Add(playerTwoCard);
+                    cardsCarriedOverFromPreviousWars.AddRange(playerOneWarCards.GetRange(0,3));
+                    cardsCarriedOverFromPreviousWars.AddRange(playerTwoWarCards.GetRange(0,3));
+                    War(playerOneCard, playerTwoCard, cardsCarriedOverFromPreviousWars);
                 }
                 else if (playerOneWarCards.Last().IsHigherThan(playerTwoWarCards.Last()))
                 {
