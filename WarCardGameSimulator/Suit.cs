@@ -7,7 +7,5 @@ namespace WarCardGameSimulator
         Spades,
         Clubs,
         Diamonds,
-        Joker,
-        
     }
 }

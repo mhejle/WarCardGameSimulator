@@ -26,5 +26,10 @@ namespace WarCardGameSimulator
         {
             return Rank == other.Rank;
         }
+
+        public override string ToString()
+        {
+            return $"{Rank} {Suit}";
+        }
     }
 }

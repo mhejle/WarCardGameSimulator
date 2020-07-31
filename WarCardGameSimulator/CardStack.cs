@@ -89,6 +89,14 @@ namespace WarCardGameSimulator
             Cards.InsertRange(0, cards);
         }
         
+        public IReadOnlyList<Card> DrawAllCards()
+        {
+            var allCards = GetAllCards();
+            Cards.Clear();
+
+            return allCards;
+        }
+        
         public bool IsEmpty => Cards.Count == 0;
         public int Count => Cards.Count;
     }

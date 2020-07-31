@@ -8,29 +8,38 @@ namespace WarCardGameSimulator
     
     public class Game
     {
-        private readonly GameSettings _gameSettings;
-        private PlayerStacks _playerStacks;
+        private readonly PlayerStacks _playerStacks;
+        private GameResult _result;
 
         public Game(GameSettings gameSettings)
         {
-            _gameSettings = gameSettings;
             
             var deckDivisionStrategyFactory = new DeckDivisionStrategyFactory();
-            var handOutStrategy = deckDivisionStrategyFactory.Create(_gameSettings.DeckDivisionStrategyType);
+            var handOutStrategy = deckDivisionStrategyFactory.Create(gameSettings.DeckDivisionStrategyType);
             
-            var deck = new Deck(_gameSettings.NumberOfJokersInDeck);
+            
+            var deck = new Deck(gameSettings.NumberOfJokersInDeck);
             _playerStacks = handOutStrategy.HandOutCards(deck);
+            
+            _result = new GameResult(_playerStacks);
         }
 
-        public GameResult PlayGame()
+        public GameResult Play()
         {
             while (BothPlayersHaveCards())
             {
+                _result.NumberOfDraws++;
+                
+                Console.WriteLine($"War: draw number: {_result.NumberOfDraws}. Cards, playerOne:{_playerStacks.PlayerOneStack.Count} playerTwo: {_playerStacks.PlayerTwoStack.Count}");
                 var playerOneCard = _playerStacks.PlayerOneStack.DrawCard();
                 var playerTwoCard =_playerStacks.PlayerTwoStack.DrawCard();
 
                 CheckDrawnCards(playerOneCard, playerTwoCard);
             }
+
+            _result.Winner = _playerStacks.PlayerOneStack.IsEmpty ? "Player two" : "Player one";
+            Console.WriteLine($"War: a winner was found: {_result.Winner}");
+            return _result;
         }
 
         private void CheckDrawnCards(Card playerOneCard, Card playerTwoCard)
@@ -51,39 +60,45 @@ namespace WarCardGameSimulator
 
         private void War(Card playerOneCard, Card playerTwoCard)
         {
+            Console.WriteLine($"War: {playerOneCard} vs {playerTwoCard}");
+            _result.NumberOfWars++;
+            
             //TODO introduce a war strategy as there are multiple variants of card drawing for war.
             //TODO introduce a war winning strategy (less than required does not always lead to defeat - just use the cards you have).
             if (_playerStacks.PlayerOneStack.Count < 4)
             {
-                //PlayerOne is unable to complete the battle and looses.
+                Console.WriteLine($"War: PlayerOne is unable to complete the battle and looses");
                 _playerStacks.PlayerTwoStack.Add(playerOneCard, playerTwoCard);
-                _playerStacks.PlayerTwoStack.Add(_playerStacks.PlayerOneStack.GetAllCards().ToArray());
+                _playerStacks.PlayerTwoStack.Add(_playerStacks.PlayerOneStack.DrawAllCards().ToArray());
             }
             else if (_playerStacks.PlayerTwoStack.Count < 4)
             {
-                //PlayerTwo is unable to complete the battle and looses.
+                Console.WriteLine($"War: PlayerTwo is unable to complete the battle and looses");
                 _playerStacks.PlayerOneStack.Add(playerOneCard, playerTwoCard);
-                _playerStacks.PlayerOneStack.Add(_playerStacks.PlayerOneStack.GetAllCards().ToArray());
+                _playerStacks.PlayerOneStack.Add(_playerStacks.PlayerOneStack.DrawAllCards().ToArray());
             }
             else
             {
                 var playerOneWarCards = _playerStacks.PlayerOneStack.DrawCards(4).ToList();
-                var playerTwoWarCards = _playerStacks.PlayerOneStack.DrawCards(4).ToList();
+                var playerTwoWarCards = _playerStacks.PlayerTwoStack.DrawCards(4).ToList();
                 
                 if (playerOneWarCards.Last().IsSameRank(playerTwoWarCards.Last()))
                 {
+                    Console.WriteLine($"War: should continue - not implemented");
                     //TODO add option for wars to continue
                     //War(playerOneCard, playerTwoCard);
                     throw new ArgumentException("continuing wars not supported");
                 }
-                else if (playerOneCard.IsHigherThan(playerTwoCard))
+                else if (playerOneWarCards.Last().IsHigherThan(playerTwoWarCards.Last()))
                 {
+                    Console.WriteLine($"War: PlayerOne won the war with {playerOneWarCards.Last()} vs {playerTwoWarCards.Last()}");
                     _playerStacks.PlayerOneStack.Add(playerOneCard, playerTwoCard);
                     _playerStacks.PlayerOneStack.Add(playerOneWarCards.ToArray());
                     _playerStacks.PlayerOneStack.Add(playerTwoWarCards.ToArray());
                 }
                 else
                 {
+                    Console.WriteLine($"War: PlayerTwo won the war with {playerTwoWarCards.Last()} vs {playerOneWarCards.Last()}");
                     _playerStacks.PlayerTwoStack.Add(playerOneCard, playerTwoCard);
                     _playerStacks.PlayerTwoStack.Add(playerOneWarCards.ToArray());
                     _playerStacks.PlayerTwoStack.Add(playerTwoWarCards.ToArray());

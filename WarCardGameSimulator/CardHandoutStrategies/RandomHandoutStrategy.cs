@@ -16,13 +16,14 @@ namespace WarCardGameSimulator.CardHandoutStrategies
             var cardCount = 0;
             while (deck.TryDrawCard(out Card c))
             {
+                cardCount++;
                 if (cardCount % 2 == 0)
                 {
                     playerOneCards.Add(c);
                 }
                 else
                 {
-                    playerOneCards.Add(c);
+                    playerTwoCards.Add(c);
                 }
             }
             

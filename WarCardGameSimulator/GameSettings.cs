@@ -5,9 +5,13 @@ namespace WarCardGameSimulator
 {
     public class GameSettings
     {
-        public ShuffleAlgorithm ShuffleAlgorithm { get; set; }
-        public DeckDivisionStrategyType DeckDivisionStrategyType { get; set; }
-        public int NumberOfJokersInDeck { get; set; }
-        
+        public DeckDivisionStrategyType DeckDivisionStrategyType { get; }
+        public int NumberOfJokersInDeck { get; }
+
+        public GameSettings(DeckDivisionStrategyType deckDivisionStrategyType, int numberOfJokersInDeck)
+        {
+            DeckDivisionStrategyType = deckDivisionStrategyType;
+            NumberOfJokersInDeck = numberOfJokersInDeck;
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,7 +14,7 @@ namespace WarCardGameSimulator
             IList<Card> cards = new List<Card>();
 
 
-            foreach (var suit in EnumUtil.Values<Suit>())
+            foreach (var suit in EnumUtil.Values<Suit>().Except(new [] {Suit.None}))
             {
                 foreach (var rank in EnumUtil.Values<Rank>().Except(new []{Rank.None, Rank.Joker}))
                 {
