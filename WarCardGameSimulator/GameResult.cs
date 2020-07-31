@@ -2,7 +2,7 @@ namespace WarCardGameSimulator
 {
     public class GameResult
     {
-        public GameResult(PlayerStacks playerStacks)
+        public GameResult()
         {
             //TODO record starting state
             Winner = "undetermined";

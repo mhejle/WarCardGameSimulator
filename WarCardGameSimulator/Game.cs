@@ -5,12 +5,13 @@ using WarCardGameSimulator.CardHandoutStrategies;
 
 namespace WarCardGameSimulator
 {
-    //TODO do we just add cards to the buttom of the winners stack - or should we keep a 'graveyard' that is shuffled when the stack is emptied?
+    //TODO do we just add cards to the bottom of the winners stack - or should we keep a 'graveyard' that is shuffled when the stack is emptied?
     
     public class Game
     {
-        private readonly PlayerStacks _playerStacks;
-        private GameResult _result;
+        private readonly CardStack _playerOne;
+        private readonly CardStack _playerTwo;
+        private readonly GameResult _result;
 
         public Game(GameSettings gameSettings)
         {
@@ -20,9 +21,12 @@ namespace WarCardGameSimulator
             
             
             var deck = new Deck(gameSettings.NumberOfJokersInDeck);
-            _playerStacks = handOutStrategy.HandOutCards(deck);
+            _playerOne = new CardStack();
+            _playerTwo = new CardStack();
             
-            _result = new GameResult(_playerStacks);
+            handOutStrategy.HandOutCards(deck, _playerOne, _playerTwo);
+            
+            _result = new GameResult();
         }
 
         public GameResult Play()
@@ -40,14 +44,14 @@ namespace WarCardGameSimulator
                     return _result;
                 }
                 
-                Console.WriteLine($"War: draw number: {_result.NumberOfDraws}. Cards, playerOne:{_playerStacks.PlayerOneStack.Count} playerTwo: {_playerStacks.PlayerTwoStack.Count}");
-                var playerOneCard = _playerStacks.PlayerOneStack.DrawCard();
-                var playerTwoCard =_playerStacks.PlayerTwoStack.DrawCard();
+                Console.WriteLine($"War: draw number: {_result.NumberOfDraws}. Cards, playerOne:{_playerOne.Count} playerTwo: {_playerTwo.Count}");
+                var playerOneCard = _playerOne.DrawCard();
+                var playerTwoCard =_playerTwo.DrawCard();
 
                 CheckDrawnCards(playerOneCard, playerTwoCard);
             }
 
-            _result.Winner = _playerStacks.PlayerOneStack.IsEmpty ? "Player two" : "Player one";
+            _result.Winner = _playerOne.IsEmpty ? "Player two" : "Player one";
             _result.WinnerFound = true;
             Console.WriteLine($"War: a winner was found: {_result.Winner}");
             return _result;
@@ -61,11 +65,11 @@ namespace WarCardGameSimulator
             }
             else if (playerOneCard.IsHigherThan(playerTwoCard))
             {
-                _playerStacks.PlayerOneStack.Add(playerOneCard, playerTwoCard);
+                _playerOne.Add(playerOneCard, playerTwoCard);
             }
             else
             {
-                _playerStacks.PlayerTwoStack.Add(playerOneCard, playerTwoCard);
+                _playerTwo.Add(playerOneCard, playerTwoCard);
             }
         }
 
@@ -76,24 +80,24 @@ namespace WarCardGameSimulator
             
             //TODO introduce a war strategy as there are multiple variants of card drawing for war.
             //TODO introduce a war winning strategy (less than required does not always lead to defeat - just use the cards you have).
-            if (_playerStacks.PlayerOneStack.Count < 4)
+            if (_playerOne.Count < 4)
             {
                 Console.WriteLine($"War: PlayerOne is unable to complete the battle and looses");
-                _playerStacks.PlayerTwoStack.Add(playerOneCard, playerTwoCard);
-                _playerStacks.PlayerTwoStack.Add(_playerStacks.PlayerOneStack.DrawAllCards().ToArray());
+                _playerTwo.Add(playerOneCard, playerTwoCard);
+                _playerTwo.Add(_playerOne.DrawAllCards().ToArray());
             }
-            else if (_playerStacks.PlayerTwoStack.Count < 4)
+            else if (_playerTwo.Count < 4)
             {
                 Console.WriteLine($"War: PlayerTwo is unable to complete the battle and looses");
-                _playerStacks.PlayerOneStack.Add(playerOneCard, playerTwoCard);
-                _playerStacks.PlayerOneStack.Add(_playerStacks.PlayerOneStack.DrawAllCards().ToArray());
+                _playerOne.Add(playerOneCard, playerTwoCard);
+                _playerOne.Add(_playerOne.DrawAllCards().ToArray());
             }
             else
             {
-                var playerOneWarBountyCards = _playerStacks.PlayerOneStack.DrawCards(3).ToList();
-                var playerTwoWarBountyCards = _playerStacks.PlayerTwoStack.DrawCards(3).ToList();
-                var playerOneWarCard = _playerStacks.PlayerOneStack.DrawCard();
-                var playerTwoWarCard = _playerStacks.PlayerTwoStack.DrawCard();
+                var playerOneWarBountyCards = _playerOne.DrawCards(3).ToList();
+                var playerTwoWarBountyCards = _playerTwo.DrawCards(3).ToList();
+                var playerOneWarCard = _playerOne.DrawCard();
+                var playerTwoWarCard = _playerTwo.DrawCard();
                 
                 if (playerOneWarCard.IsSameRank(playerTwoWarCard))
                 {
@@ -111,20 +115,20 @@ namespace WarCardGameSimulator
                 else if (playerOneWarBountyCards.Last().IsHigherThan(playerTwoWarBountyCards.Last()))
                 {
                     Console.WriteLine($"War: PlayerOne won the war with {playerOneWarBountyCards.Last()} vs {playerTwoWarBountyCards.Last()}");
-                    _playerStacks.PlayerOneStack.Add(playerOneCard, playerTwoCard);
-                    _playerStacks.PlayerOneStack.Add(playerOneWarBountyCards.ToArray());
-                    _playerStacks.PlayerOneStack.Add(playerTwoWarBountyCards.ToArray());
+                    _playerOne.Add(playerOneCard, playerTwoCard);
+                    _playerOne.Add(playerOneWarBountyCards.ToArray());
+                    _playerOne.Add(playerTwoWarBountyCards.ToArray());
                     
-                    _playerStacks.PlayerOneStack.Add(playerOneWarCard, playerTwoWarCard);
+                    _playerOne.Add(playerOneWarCard, playerTwoWarCard);
                 }
                 else
                 {
                     Console.WriteLine($"War: PlayerTwo won the war with {playerTwoWarBountyCards.Last()} vs {playerOneWarBountyCards.Last()}");
-                    _playerStacks.PlayerTwoStack.Add(playerOneCard, playerTwoCard);
-                    _playerStacks.PlayerTwoStack.Add(playerOneWarBountyCards.ToArray());
-                    _playerStacks.PlayerTwoStack.Add(playerTwoWarBountyCards.ToArray());
+                    _playerTwo.Add(playerOneCard, playerTwoCard);
+                    _playerTwo.Add(playerOneWarBountyCards.ToArray());
+                    _playerTwo.Add(playerTwoWarBountyCards.ToArray());
                     
-                    _playerStacks.PlayerTwoStack.Add(playerOneWarCard, playerTwoWarCard);
+                    _playerTwo.Add(playerOneWarCard, playerTwoWarCard);
                 }
                 
             }
@@ -132,7 +136,7 @@ namespace WarCardGameSimulator
 
         private bool BothPlayersHaveCards()
         {
-            return !_playerStacks.PlayerOneStack.IsEmpty && !_playerStacks.PlayerTwoStack.IsEmpty;
+            return !_playerOne.IsEmpty && !_playerTwo.IsEmpty;
         }
     }
 }

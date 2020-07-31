@@ -1,24 +1,19 @@
-using System.Collections.Generic;
 using WarCardGameSimulator.ShufflingStrategies;
 
 namespace WarCardGameSimulator.CardHandoutStrategies
 {
     public class AllJokersOnOneHandStrategy : IHandOutStrategy
     {
-        public PlayerStacks HandOutCards(Deck deck)
+        public void HandOutCards(Deck deck, CardStack playerOne, CardStack playerTwo)
         {
             deck.GetAllCards();
-            
-            var playerOneCards = new List<Card>();
-            var playerTwoCards = new List<Card>();
             
             ShuffleStrategyFactory shuffleStrategyFactory = new ShuffleStrategyFactory();
             deck.Shuffle(shuffleStrategyFactory.Create(ShuffleAlgorithm.Knuth));
 
             var jokers = deck.DrawAll(Rank.Joker, Suit.None);
-            playerOneCards.AddRange(jokers);
-            playerTwoCards.AddRange(deck.DrawCards(jokers.Count));
-
+            playerOne.Add(jokers);
+            playerTwo.Add(deck.DrawCards(jokers.Count));
             
             //TODO duplicate of RandomHandoutStrategy - could use that strategy for the rest of the deck.
             var cardCount = 0;
@@ -27,16 +22,13 @@ namespace WarCardGameSimulator.CardHandoutStrategies
                 cardCount++;
                 if (cardCount % 2 == 0)
                 {
-                    playerOneCards.Add(c);
+                    playerOne.Add(c);
                 }
                 else
                 {
-                    playerTwoCards.Add(c);
+                    playerTwo.Add(c);
                 }
             }
-            
-            PlayerStacks result = new PlayerStacks(new PlayerCardStack(playerTwoCards), new PlayerCardStack(playerOneCards));
-            return result;
         }
     }
 }

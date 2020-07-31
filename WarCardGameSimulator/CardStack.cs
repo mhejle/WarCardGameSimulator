@@ -11,14 +11,20 @@ namespace WarCardGameSimulator
     /// Note:
     /// Inspired by: https://rosettacode.org/wiki/Playing_cards#C.23
     /// </summary>
-    public abstract class CardStack 
+    public class CardStack 
     {
-        protected List<Card> Cards { get; } //TODO consider private?
+        private List<Card> Cards { get; }
 
-        protected CardStack(IList<Card> cards)
+        public CardStack(IList<Card> cards)
         {
             Cards = cards.ToList();
         }
+
+        public CardStack()
+        {
+            Cards = new List<Card>();
+        }
+        
         
         public void Shuffle(IShufflingStrategy shufflingStrategy)
         {
@@ -82,6 +88,11 @@ namespace WarCardGameSimulator
         }
 
         public void Add(params Card[] cards)
+        {
+            Add(cards.ToList());
+        }
+        
+        public void Add(IEnumerable<Card> cards)
         {
             //Adding to a list using insert() is O(n*m)
             //https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1.insertrange?redirectedfrom=MSDN&view=netcore-3.1#System_Collections_Generic_List_1_InsertRange_System_Int32_System_Collections_Generic_IEnumerable__0__

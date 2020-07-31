@@ -2,7 +2,7 @@ namespace WarCardGameSimulator
 {
     public interface IHandOutStrategy
     {
-        PlayerStacks HandOutCards(Deck deck);
+        void HandOutCards(Deck deck, CardStack playerOne, CardStack playerTwo);
 
 
     }
