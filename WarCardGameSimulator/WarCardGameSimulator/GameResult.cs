@@ -5,12 +5,12 @@ namespace WarCardGameSimulator
         public GameResult()
         {
             //TODO record starting state
-            Winner = "undetermined";
+            Outcome = "undetermined";
         }
 
         public int NumberOfWars { get; set; }
         public int NumberOfDraws { get; set; }
-        public string Winner { get; set; }
+        public string Outcome { get; set; }
         
         public bool WinnerFound { get; set; }
     }

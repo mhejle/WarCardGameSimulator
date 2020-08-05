@@ -13,7 +13,7 @@ namespace WarCardGameSimulator
         /// <param name="deckDivisionStrategy"></param>
         /// <param name="numberOfJokers"></param>
         /// <param name="numberOfGamesToPlay"></param>
-        static void Main(DeckDivisionStrategyType deckDivisionStrategy = DeckDivisionStrategyType.Random, int numberOfJokers = 0, int numberOfGamesToPlay = 1)
+        static void Main(DeckDivisionStrategyType deckDivisionStrategy = DeckDivisionStrategyType.Random, int numberOfJokers = 0, int numberOfGamesToPlay = 100)
         {
             Console.WriteLine("Lets start a war");
             
@@ -27,7 +27,7 @@ namespace WarCardGameSimulator
             
                 //TODO add option to save to a file / store in sql and run multiple game for statistics
                 Console.WriteLine($"----Result----");
-                Console.WriteLine($"     Winner :  {gameResult.Winner}");
+                Console.WriteLine($"     Winner :  {gameResult.Outcome}");
                 Console.WriteLine($"     NumberOfDraws :  {gameResult.NumberOfDraws}");
                 Console.WriteLine($"     NumberOfWars :  {gameResult.NumberOfWars}");
 

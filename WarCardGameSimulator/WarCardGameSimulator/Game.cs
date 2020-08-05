@@ -13,6 +13,8 @@ namespace WarCardGameSimulator
         private readonly CardStack _playerTwo;
         private readonly GameResult _result;
 
+        private readonly HashSet<string> _previousGameCombinations = new HashSet<string>();
+        
         public Game(GameSettings gameSettings)
         {
             
@@ -33,11 +35,23 @@ namespace WarCardGameSimulator
         {
             while (BothPlayersHaveCards())
             {
+
+                var currentGameCombination = GetCurrentGameCombination();
+                if (CombinationHasBeenSeenBefore(currentGameCombination)) //TODO should this come after the draw or before
+                {
+                    _result.Outcome = $"Stale mate after {_result.NumberOfDraws} draws";
+                    _result.WinnerFound = false;
+                    Console.WriteLine(_result.Outcome);
+                    return _result;
+                }
+
+                _previousGameCombinations.Add(currentGameCombination);//TODO should this come after the draw or before
+                
                 _result.NumberOfDraws++;
 
                 if (_result.NumberOfDraws > 20000)
                 {
-                    _result.Winner = "No winner found in 20000 draws";
+                    _result.Outcome = "No winner found in 20000 draws";
                     _result.WinnerFound = false;
                     Console.WriteLine("No winner found in 20000 draws");
                     
@@ -51,10 +65,20 @@ namespace WarCardGameSimulator
                 CheckDrawnCards(playerOneCard, playerTwoCard);
             }
 
-            _result.Winner = _playerOne.IsEmpty ? "Player two" : "Player one";
+            _result.Outcome = _playerOne.IsEmpty ? "Player two won" : "Player one won";
             _result.WinnerFound = true;
-            Console.WriteLine($"War: a winner was found: {_result.Winner}");
+            Console.WriteLine($"War: a winner was found: {_result.Outcome}");
             return _result;
+        }
+
+        private string GetCurrentGameCombination()
+        {
+            return $"deckOne: {_playerOne.GetStateAsString()} - deckTwo: {_playerTwo.GetStateAsString()}";
+        }
+
+        private bool CombinationHasBeenSeenBefore(string currentGameCombination)
+        {
+            return _previousGameCombinations.Contains(currentGameCombination);
         }
 
         private void CheckDrawnCards(Card playerOneCard, Card playerTwoCard)

@@ -110,5 +110,10 @@ namespace WarCardGameSimulator
         
         public bool IsEmpty => Cards.Count == 0;
         public int Count => Cards.Count;
+
+        public string GetStateAsString()
+        {
+            return string.Join(",", Cards);
+        }
     }
 }
