@@ -1,16 +1,16 @@
-using WarCardGameSimulator.CardHandoutStrategies;
+using WarCardGameSimulator.DealerStrategies;
 using WarCardGameSimulator.ShufflingStrategies;
 
 namespace WarCardGameSimulator
 {
     public class GameSettings
     {
-        public DeckDivisionStrategyType DeckDivisionStrategyType { get; }
+        public DealerStrategyType DealerStrategyType { get; }
         public int NumberOfJokersInDeck { get; }
 
-        public GameSettings(DeckDivisionStrategyType deckDivisionStrategyType, int numberOfJokersInDeck)
+        public GameSettings(DealerStrategyType dealerStrategyType, int numberOfJokersInDeck)
         {
-            DeckDivisionStrategyType = deckDivisionStrategyType;
+            DealerStrategyType = dealerStrategyType;
             NumberOfJokersInDeck = numberOfJokersInDeck;
         }
     }

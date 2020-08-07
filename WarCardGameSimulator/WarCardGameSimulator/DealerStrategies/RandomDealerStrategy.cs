@@ -1,10 +1,10 @@
 using WarCardGameSimulator.ShufflingStrategies;
 
-namespace WarCardGameSimulator.CardHandoutStrategies
+namespace WarCardGameSimulator.DealerStrategies
 {
-    public class RandomHandoutStrategy : IHandOutStrategy
+    public class RandomDealerStrategy : IDealerStrategy
     {
-        public void HandOutCards(Deck deck, CardStack playerOne, CardStack playerTwo)
+        public void DealCards(Deck deck, CardStack playerOne, CardStack playerTwo)
         {
             ShuffleStrategyFactory shuffleStrategyFactory = new ShuffleStrategyFactory();
             deck.Shuffle(shuffleStrategyFactory.Create(ShuffleAlgorithm.Knuth));

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WarCardGameSimulator.CardHandoutStrategies;
+using WarCardGameSimulator.DealerStrategies;
 
 namespace WarCardGameSimulator
 {
@@ -10,14 +10,14 @@ namespace WarCardGameSimulator
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="deckDivisionStrategy"></param>
+        /// <param name="dealerStrategy"></param>
         /// <param name="numberOfJokers"></param>
         /// <param name="numberOfGamesToPlay"></param>
-        static void Main(DeckDivisionStrategyType deckDivisionStrategy = DeckDivisionStrategyType.Random, int numberOfJokers = 0, int numberOfGamesToPlay = 100)
+        static void Main(DealerStrategyType dealerStrategy = DealerStrategyType.Random, int numberOfJokers = 0, int numberOfGamesToPlay = 100)
         {
             Console.WriteLine("Lets start a war");
             
-            var gameSettings = new GameSettings(deckDivisionStrategy, numberOfJokers);
+            var gameSettings = new GameSettings(dealerStrategy, numberOfJokers);
 
             var gameResults = new List<GameResult>();
             for (var i = 0; i < numberOfGamesToPlay; i++)

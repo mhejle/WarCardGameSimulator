@@ -1,10 +1,10 @@
 using WarCardGameSimulator.ShufflingStrategies;
 
-namespace WarCardGameSimulator.CardHandoutStrategies
+namespace WarCardGameSimulator.DealerStrategies
 {
-    public class AllJokersOnOneHandStrategy : IHandOutStrategy
+    public class AllJokersOnOneHandDealerStrategy : IDealerStrategy
     {
-        public void HandOutCards(Deck deck, CardStack playerOne, CardStack playerTwo)
+        public void DealCards(Deck deck, CardStack playerOne, CardStack playerTwo)
         {
             deck.GetAllCards();
             

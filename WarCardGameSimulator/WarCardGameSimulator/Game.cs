@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WarCardGameSimulator.CardHandoutStrategies;
+using WarCardGameSimulator.DealerStrategies;
 
 namespace WarCardGameSimulator
 {
@@ -18,15 +18,15 @@ namespace WarCardGameSimulator
         public Game(GameSettings gameSettings)
         {
             
-            var deckDivisionStrategyFactory = new DeckDivisionStrategyFactory();
-            var handOutStrategy = deckDivisionStrategyFactory.Create(gameSettings.DeckDivisionStrategyType);
+            var deckDivisionStrategyFactory = new DealerFactory();
+            var handOutStrategy = deckDivisionStrategyFactory.Create(gameSettings.DealerStrategyType);
             
             
             var deck = new Deck(gameSettings.NumberOfJokersInDeck);
             _playerOne = new CardStack();
             _playerTwo = new CardStack();
             
-            handOutStrategy.HandOutCards(deck, _playerOne, _playerTwo);
+            handOutStrategy.DealCards(deck, _playerOne, _playerTwo);
             
             _result = new GameResult();
         }
